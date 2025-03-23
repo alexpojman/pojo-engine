@@ -5,9 +5,8 @@ mod input;
 mod physics;
 mod renderer;
 
-use renderer::window::WindowedApp;
-
 fn main() {
     env_logger::init();
-    WindowedApp::new().run();
+
+    let _ = pollster::block_on(renderer::window::create());
 }
