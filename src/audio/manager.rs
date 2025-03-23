@@ -1,9 +1,6 @@
 use rodio::OutputStream;
 use rodio::OutputStreamHandle;
-use rodio::{Decoder, Source};
-use std::fs::File;
-use std::io::BufReader;
-use std::time::Duration;
+use rodio::Source;
 
 pub struct AudioManager {
     pub output_stream: OutputStream,
