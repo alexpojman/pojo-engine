@@ -1,8 +1,10 @@
 use wgpu::{
-    CommandEncoderDescriptor, Device, Instance, Queue, RenderPipeline, Surface,
-    SurfaceConfiguration, SurfaceError, TextureViewDescriptor,
+    util::DeviceExt, Buffer, CommandEncoderDescriptor, Device, Instance, Queue, RenderPipeline,
+    Surface, SurfaceConfiguration, SurfaceError, TextureViewDescriptor,
 };
 use winit::{dpi::PhysicalSize, event::WindowEvent, window::Window};
+
+use super::vertex::{Vertex, VERTICES};
 
 pub struct State<'a> {
     surface: Surface<'a>,
@@ -12,6 +14,8 @@ pub struct State<'a> {
     pub size: PhysicalSize<u32>,
     pub window: &'a Window,
     render_pipeline: RenderPipeline,
+    vertex_buffer: Buffer,
+    num_vertices: u32,
 }
 
 impl<'a> State<'a> {
@@ -88,8 +92,8 @@ impl<'a> State<'a> {
             layout: Some(&render_pipeline_layout),
             vertex: wgpu::VertexState {
                 module: &shader,
-                entry_point: Some("vs_main"), // 1.
-                buffers: &[],                 // 2.
+                entry_point: Some("vs_main"),
+                buffers: &[Vertex::desc()],
                 compilation_options: wgpu::PipelineCompilationOptions::default(),
             },
             fragment: Some(wgpu::FragmentState {
@@ -126,6 +130,14 @@ impl<'a> State<'a> {
             cache: None,     // 6.
         });
 
+        let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Vertex Buffer"),
+            contents: bytemuck::cast_slice(VERTICES),
+            usage: wgpu::BufferUsages::VERTEX,
+        });
+
+        let num_vertices = VERTICES.len() as u32;
+
         Self {
             surface,
             device,
@@ -134,6 +146,8 @@ impl<'a> State<'a> {
             size,
             window,
             render_pipeline,
+            vertex_buffer,
+            num_vertices,
         }
     }
 
@@ -189,7 +203,8 @@ impl<'a> State<'a> {
         });
 
         render_pass.set_pipeline(&self.render_pipeline);
-        render_pass.draw(0..3, 0..1);
+        render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
+        render_pass.draw(0..self.num_vertices, 0..1);
 
         drop(render_pass);
 

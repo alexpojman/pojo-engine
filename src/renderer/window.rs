@@ -1,4 +1,3 @@
-use log::info;
 use wgpu::SurfaceError;
 use winit::{
     event::*,
@@ -58,7 +57,7 @@ fn start_event_loop(
                         ..
                     } => control_flow.exit(),
                     WindowEvent::Resized(physical_size) => {
-                        info!("physical_size: {physical_size:?}");
+                        log::info!("physical_size: {physical_size:?}");
                         surface_configured = true;
                         state.resize(*physical_size);
                     }
