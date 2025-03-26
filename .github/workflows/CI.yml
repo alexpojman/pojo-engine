@@ -20,9 +20,18 @@ jobs:
 
     - name: Install linux build requirements
       run: sudo apt install --yes --no-install-recommends libasound2-dev pkg-config
+    
+    - name: Cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Build
       run: cargo build --verbose
-      
+
     - name: Run tests
       run: cargo test --verbose
