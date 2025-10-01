@@ -51,8 +51,8 @@ jobs:
     - name: Make Changes
       if: github.event_name == 'pull_request'
       run: |
-        git config --global user.name GitHub Actions [Bot]
-        git config --global user.email github-actions[bot]@users.noreply.github.com 
+        git config --global user.name "GitHub Actions [Bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com" 
         touch test-${{ github.run_id }}.json
         git add test-${{ github.run_id }}.json
         git commit -m "Add test.json" || echo "No changes to commit"
