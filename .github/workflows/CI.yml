@@ -55,7 +55,7 @@ jobs:
         git config --global user.email "github-actions[bot]@users.noreply.github.com" 
         touch test-${{ github.run_id }}.json
         git add test-${{ github.run_id }}.json
-        git commit -m "Add test.json" || echo "No changes to commit"
+        git commit -m "[skip ci] Add test.json" || echo "No changes to commit"
 
         GITHUB_HEAD_REF=${{ github.head_ref }}
         echo "Pushing to $GITHUB_HEAD_REF"
