@@ -9,6 +9,10 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
 
@@ -35,3 +39,30 @@ jobs:
 
     - name: Run tests
       run: cargo test --verbose
+
+  update-formatting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: true
+        token: ${{ secrets.ENGINE_PAT }}
+
+    - name: Install rustfmt
+      run: rustup component add rustfmt
+
+    - name: Make Changes
+      if: github.event_name != 'pull_request'
+      run: |
+        git config --global user.name "GitHub Actions [Bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com" 
+        touch test-final-con-2.json
+        git add test-final-con-2.json
+        git commit -m "Add test-final-con.json" || echo "No changes to commit"
+
+        GITHUB_HEAD_REF=${{ github.head_ref }}
+        echo "Pushing to $GITHUB_HEAD_REF"
+        git fetch origin $GITHUB_HEAD_REF
+        git pull --rebase origin $GITHUB_HEAD_REF
+        git push origin HEAD:$GITHUB_HEAD_REF
+

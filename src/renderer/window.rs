@@ -10,6 +10,7 @@ use crate::graphics::state::State;
 
 pub async fn create() -> Result<(), Box<dyn std::error::Error>> {
     let event_loop = EventLoop::new().unwrap();
+
     event_loop.set_control_flow(ControlFlow::Poll);
 
     let window_builder = WindowBuilder::new()
