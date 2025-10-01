@@ -53,7 +53,8 @@ jobs:
         git add test.json
         git commit -m "Add test.json" || echo "No changes to commit"
         GITHUB_HEAD_REF=${{ github.head_ref }}
-        git fetch origin/$GITHUB_HEAD_REF
-        git pull --rebase origin/$GITHUB_HEAD_REF
+        echo "Pushing to $GITHUB_HEAD_REF"
+        git fetch origin $GITHUB_HEAD_REF
+        git pull --rebase origin $GITHUB_HEAD_REF
         git push origin HEAD:$GITHUB_HEAD_REF
 
