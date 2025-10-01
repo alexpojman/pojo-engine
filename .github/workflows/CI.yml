@@ -43,7 +43,7 @@ jobs:
       with:
         fetch-depth: 0
         persist-credentials: true
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.ENGINE_PAT }}
 
     - name: Install rustfmt
       run: rustup component add rustfmt
@@ -53,9 +53,9 @@ jobs:
       run: |
         git config --global user.name "GitHub Actions [Bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com" 
-        touch test-${{ github.run_id }}.json
-        git add test-${{ github.run_id }}.json
-        git commit -m "[skip ci] Add test.json" || echo "No changes to commit"
+        touch test-final.json
+        git add test-final.json
+        git commit -m "Add test-final.json" || echo "No changes to commit"
 
         GITHUB_HEAD_REF=${{ github.head_ref }}
         echo "Pushing to $GITHUB_HEAD_REF"
