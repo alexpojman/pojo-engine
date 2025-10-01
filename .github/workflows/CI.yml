@@ -40,6 +40,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        persist-credentials: true
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install rustfmt
       run: rustup component add rustfmt
