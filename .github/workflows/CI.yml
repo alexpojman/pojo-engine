@@ -9,6 +9,10 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
 
@@ -53,9 +57,9 @@ jobs:
       run: |
         git config --global user.name "GitHub Actions [Bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com" 
-        touch test-final.json
-        git add test-final.json
-        git commit -m "Add test-final.json" || echo "No changes to commit"
+        touch test-final-con.json
+        git add test-final-con.json
+        git commit -m "Add test-final-con.json" || echo "No changes to commit"
 
         GITHUB_HEAD_REF=${{ github.head_ref }}
         echo "Pushing to $GITHUB_HEAD_REF"
