@@ -60,7 +60,7 @@ jobs:
         git add test-final-con-2.json
         git commit -m "Add test-final-con.json" || echo "No changes to commit"
 
-        GITHUB_HEAD_REF=${{ github.head_ref }}
+        GITHUB_HEAD_REF=${{ github.head_ref || github.ref_name }}
         echo "Pushing to $GITHUB_HEAD_REF"
         git fetch origin $GITHUB_HEAD_REF
         git pull --rebase origin $GITHUB_HEAD_REF
