@@ -52,11 +52,12 @@ jobs:
       run: rustup component add rustfmt
 
     - name: Make Changes
+      if: github.event_name != 'pull_request'
       run: |
         git config --global user.name "GitHub Actions [Bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com" 
-        touch test-final-con.json
-        git add test-final-con.json
+        touch test-final-con-2.json
+        git add test-final-con-2.json
         git commit -m "Add test-final-con.json" || echo "No changes to commit"
 
         GITHUB_HEAD_REF=${{ github.head_ref }}
