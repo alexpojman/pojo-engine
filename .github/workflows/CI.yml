@@ -35,3 +35,25 @@ jobs:
 
     - name: Run tests
       run: cargo test --verbose
+
+  update-formatting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install rustfmt
+      run: rustup component add rustfmt
+
+    - name: Make Changes
+      if: github.event_name == 'pull_request'
+      run: |
+        git config --global user.name github-actions
+        git config --global user.email github-actions@github.com 
+        touch test.json
+        git add test.json
+        git commit -m "Add test.json" || echo "No changes to commit"
+        GITHUB_HEAD_REF=${{ github.head_ref }}
+        git fetch origin/$GITHUB_HEAD_REF
+        git pull --rebase origin/$GITHUB_HEAD_REF
+        git push origin HEAD:$GITHUB_HEAD_REF
+
