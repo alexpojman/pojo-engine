@@ -58,7 +58,7 @@ jobs:
 
       - name: "Validate artifact path"
         run: |
-          if [ ! -d "./crazy-path" ]; then
+          if [ ! -d "./src/audio" ]; then
             echo "ERROR: ./crazy-path not found"
             exit 1
           fi
@@ -66,8 +66,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: test-files
-          path: |
-            ./crazy-path
+          path: ./src/audio
+
+      - name: "Display artifact directory"
+        run: |
+          ls -l ./src/audio
 
       - name: Make Changes
         if: github.event_name != 'pull_request'
