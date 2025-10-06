@@ -56,6 +56,12 @@ jobs:
           path: |
             ./test.json
 
+      - name: "Validate artifact path"
+        run: |
+          if [ ! -d "./crazy-path" ]; then
+            echo "ERROR: ./crazy-path not found"
+            exit 1
+          fi
       - name: "Download artifact"
         uses: actions/download-artifact@v4
         with:
